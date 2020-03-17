@@ -34,8 +34,8 @@ class ControlActivity: AppCompatActivity(){
 
         ConnectToDevice(this).execute()
 
-        control_led_on.setOnClickListener { sendCommand("a") }
-        control_led_off.setOnClickListener { sendCommand("b") }
+        control_led_on.setOnClickListener { sendCommand("1") }
+        control_led_off.setOnClickListener { sendCommand("0") }
         control_led_disconnect.setOnClickListener { disconnect() }
     }
 
