@@ -9,6 +9,8 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.control_layout.*
 import java.io.IOException
@@ -34,15 +36,43 @@ class ControlActivity: AppCompatActivity(){
 
         ConnectToDevice(this).execute()
 
-        control_led_on.setOnClickListener { sendCommand("1") }
-        control_led_off.setOnClickListener { sendCommand("0") }
+        control_led_on.setOnClickListener { sendCommand(255) }
+        control_led_off.setOnClickListener { sendCommand(0) }
         control_led_disconnect.setOnClickListener { disconnect() }
+        seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                sendCommand(progress)
+                // Write code to perform some action when progress is changed.
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is started.
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is stopped.
+              //  Toast.makeText(this@MainActivity, "Progress is " + seekBar.progress + "%", Toast.LENGTH_SHORT).show()
+            }
+        })
+
     }
+
 
     private fun sendCommand(input: String) {
         if (m_bluetoothSocket != null) {
             try{
                 m_bluetoothSocket!!.outputStream.write(input.toByteArray())
+            } catch(e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    private fun sendCommand(input: Int) {
+        if (m_bluetoothSocket != null) {
+            try{
+                m_bluetoothSocket!!.outputStream.write(input)
             } catch(e: IOException) {
                 e.printStackTrace()
             }
